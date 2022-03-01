@@ -13,8 +13,8 @@ X, y = make_circles(n_samples=n, factor=0.5, noise=0.05)
 
 y = y[:,np.newaxis]
 
-plt.scatter(X[y[:,0]==0,0], X[y[:,0]==0,1], c='yellow')
-plt.scatter(X[y[:,0]==1,0], X[y[:,0]==1,1], c='green')
+# plt.scatter(X[y[:,0]==0,0], X[y[:,0]==0,1], c='yellow')
+# plt.scatter(X[y[:,0]==1,0], X[y[:,0]==1,1], c='green')
 # plt.show()
 
 # CLASE DE LA CAPA DE LA RED
@@ -29,14 +29,14 @@ sigmoid = (lambda x: 1 / (1 + np.exp(-x)),
               lambda x: x * (1 - x))    
 
 _x = np.linspace(-5, 5, 100)
-plt.plot(_x, sigmoid[0](_x))
+# plt.plot(_x, sigmoid[0](_x))
 # plt.show()
 
 # CREAR LAS CAPAS DE LA RED
 l0 = neural_layer(p, 4, sigmoid)
 l1 = neural_layer(4, 2, sigmoid)
 
-topology = [p,4,8,16,2]
+topology = [p,4,8,1]
 
 def create_net(topology, act_f):
     net = []
@@ -76,10 +76,47 @@ def train(neural_net, X, y, act_f, lr=0.05, train = True):
             neural_net[l].b = neural_net[l].b - np.mean(deltas[0], axis=0, keepdims=True) * lr
             neural_net[l].w = neural_net[l].w - out[l][1].T @ deltas[0] * lr
         
-        return out[-1][1]
+    return out[-1][1]
 
 
 train(neural_net, X, y, l2_cost, 0.05, True)
 
 # --------------------------------------------------
 # PREDICCION
+
+import time 
+from IPython.display import clear_output
+
+neural_n = create_net(topology, sigmoid)
+loss = []
+
+for i in range(1500):
+    # TRAINING
+    pY = train(neural_n, X, y, l2_cost)
+
+    if i % 25 == 0:
+        loss.append(l2_cost[0](pY, y))
+
+        res = 50
+
+        _x0 = np.linspace(-1.5, 1.5, res)
+        _x1 = np.linspace(-1.5, 1.5, res)
+
+        _y = np.zeros((res, res))
+
+        for i0, x0 in enumerate(_x0):
+            for i1, x1 in enumerate(_x1):
+                _y[i0, i1] = train(neural_n, np.array([[x0, x1]]), y, l2_cost, train= False)[0][0]
+
+    if i % 200 == 0:
+        plt.pcolormesh(_x0, _x1, _y, cmap='RdBu_r')
+        plt.axis('equal')
+
+        plt.scatter(X[y[:,0]==0,0], X[y[:,0]==0,1], c='skyblue')
+        plt.scatter(X[y[:,0]==1,0], X[y[:,0]==1,1], c='orange')
+
+        clear_output(wait=True)
+        plt.show()
+        plt.plot(range(len(loss)), loss)
+        plt.show()
+        time.sleep(0.5)

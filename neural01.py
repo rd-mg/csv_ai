@@ -45,7 +45,7 @@ neural_net = create_net(topology, sigmoid)
 
 l2_cost = (lambda Yp, Yr: np.mean((Yp-Yr)**2), lambda Yp , Yr : (Yp - Yr))
 
-def train(neural_net, X, y, l2_cost, lr=0.5):
+def train(neural_net, X, y, act_f, lr=0.5, train = True):
     out = [(None, X)]
 
     # forward pass
@@ -54,7 +54,12 @@ def train(neural_net, X, y, l2_cost, lr=0.5):
         a = layer.act_f[0](z)
 
         out.append((z, a))
-    print(out[-1][1])
+    print(act_f[0](out[-1][1],y))
+
+    if train:
+    # backward pass
+        delta = []
+    # gradient decent
 
 
 

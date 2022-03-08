@@ -57,7 +57,7 @@ def train(neural_net, X, y, act_f, lr=0.05, train = True):
         a = layer.act_f[0](z)
 
         out.append((z, a))
-    print(act_f[0](out[-1][1],y))
+    # print(act_f[0](out[-1][1],y))
 
     if train:
     # TRAINING
@@ -116,7 +116,7 @@ for i in range(1500):
         plt.scatter(X[y[:,0]==1,0], X[y[:,0]==1,1], c='orange')
 
         clear_output(wait=True)
-        plt.show()
+        # plt.show()
         plt.plot(range(len(loss)), loss)
-        plt.show()
+        # plt.show()
         time.sleep(0.5)

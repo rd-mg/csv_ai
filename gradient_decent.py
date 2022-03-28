@@ -18,5 +18,25 @@ plt.colorbar()
 
 
 Theta = np.random.rand(2) * 4 - 2
-plt.plot(Theta[0],Theta[1], 'o', c='red')
+_T =np.copy(Theta)
+h = 0.001
+grad = np.zeros(2)
+lr = 0.005
+
+plt.plot(Theta[0],Theta[1], 'o', c='white')
+
+# partial derivative of func
+for _ in range(100000):
+    for it, th in enumerate(Theta):
+        _T = np.copy(Theta)
+        _T[it] = _T[it] + h
+        deriv = (func(_T) - func(Theta)) / h
+        grad [it] = deriv
+
+    Theta = Theta - lr * grad
+    if (_ % 100) == 0:
+        plt.plot(Theta[0],Theta[1], 'o', c='red')
+        plt.pause(0.001)
+
+plt.plot(Theta[0],Theta[1], 'o', c='green')
 plt.show()

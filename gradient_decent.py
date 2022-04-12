@@ -26,7 +26,7 @@ lr = 0.005
 plt.plot(Theta[0],Theta[1], 'o', c='white')
 
 # partial derivative of func
-for _ in range(100000):
+for _ in range(1000000):
     for it, th in enumerate(Theta):
         _T = np.copy(Theta)
         _T[it] = _T[it] + h
@@ -36,7 +36,7 @@ for _ in range(100000):
     Theta = Theta - lr * grad
     if (_ % 100) == 0:
         plt.plot(Theta[0],Theta[1], 'o', c='red')
-        plt.pause(0.001)
+        # plt.pause(0.0001)
 
 plt.plot(Theta[0],Theta[1], 'o', c='green')
 plt.show()
